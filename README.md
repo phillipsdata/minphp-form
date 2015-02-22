@@ -9,7 +9,7 @@ Form Builder Library for HTML forms.
 Install via composer:
 
 ```sh
-composer install minphp/form:dev-master
+composer require minphp/form:dev-master
 ```
 
 ## Basic Usage
