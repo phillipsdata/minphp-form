@@ -1,15 +1,16 @@
 <?php
-namespace minphp\Form;
+namespace Minphp\Form\Tests;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
+use Minphp\Form\Form;
 
 /**
- * @coversDefaultClass \minphp\Form\Form
+ * @coversDefaultClass \Minphp\Form\Form
  */
 class FormTest extends PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $this->assertInstanceOf('\minphp\Form\Form', new Form());
+        $this->assertInstanceOf('\Minphp\Form\Form', new Form());
     }
 }
