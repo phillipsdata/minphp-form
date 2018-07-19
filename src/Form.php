@@ -482,7 +482,11 @@ class Form extends Html
      * Creates a select list
      *
      * @param string $name The name to set in the HTML name field
-     * @param array $options The options to place in this select list
+     * @param array $options A list of 'value'=>'name' options, or an array containing:
+     *  - name The option label
+     *      If set to 'optgroup', an <optgroup> tag is created
+     *      If set to 'close_optgroup', an </optgroup> tag is created to close a previously opened optgroup
+     *  - value The option value
      * @param mixed $selected_value The option(s) to set as selected
      * @param array $attributes Attributes for this input field
      * @param array $option_attributes Attributes for each option to set. If
@@ -511,8 +515,12 @@ class Form extends Html
      * Creates a select list with multiple selectable options
      *
      * @param string $name The name to set in the HTML name field
-     * @param array $options The options to place in this select list
-     * @param string $selected_value The option to set as selected
+     * @param array $options A list of 'value'=>'name' options, or an array containing:
+     *  - name The option label
+     *      If set to 'optgroup', an <optgroup> tag is created
+     *      If set to 'close_optgroup', an </optgroup> tag is created to close a previously opened optgroup
+     *  - value The option value
+     * @param string $selected_values The option to set as selected
      * @param array $attributes Attributes for this input field
      * @param array $option_attributes Attributes for each option to set. If
      *  single dimension will set the attributes for every option, if
@@ -594,10 +602,14 @@ class Form extends Html
 
     /**
      * Builds select options and optgroups if given. An optgroup will continue
-     * until the end of the select options, or until the next optgroup begins.
+     * until the end of the select options, until the next 'close_optgroup',
+     * or until the next optgroup begins.
      *
-     * @param array $options A list of 'name'=>'value' options to set into
-     *  <option> tags, if 'name' is 'optgroup' an <optgroup> tag is created instead
+     * @param array $options A list of 'value'=>'name' options, or an array containing:
+     *  - name The option label
+     *      If set to 'optgroup', an <optgroup> tag is created
+     *      If set to 'close_optgroup', an </optgroup> tag is created to close a previously opened optgroup
+     *  - value The option value
      * @param array $selected_values Values corresponding to an option's value to set as selected
      * @param array $attributes Attributes for each option field
      * @return string The option fields along with any optgroups
@@ -631,9 +643,17 @@ class Form extends Html
                     $attr = $attributes[$value];
                 }
 
+                // Close an open optgroup tag if this option is set to do so, then move on
+                if (strpos($value, "close_optgroup") === 0 && $open_group_tag) {
+                    $html .= "</optgroup>" . $this->eol;
+                    $open_group_tag = false;
+                    continue;
+                }
+
                 if (strpos($value, "optgroup") === 0) {
+                    // Close an open optgroup tag before starting another
                     if ($open_group_tag) {
-                        $html .= "</optgroup>" . $this->eol; //close an open tag before starting another
+                        $html .= "</optgroup>" . $this->eol;
                     }
 
                     $html .= "<optgroup label=\"" . $this->_($name, true) . "\">";
@@ -652,7 +672,7 @@ class Form extends Html
             }
         }
 
-        //Before returning add closing optgroup tag if necessary
+        // Before returning, close the remaining optgroup tag if necessary
         if ($open_group_tag) {
             $html .= "</optgroup>" . $this->eol;
         }
