@@ -9,9 +9,6 @@ use Minphp\Form\Form;
  */
 class FormTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers ::__construct
-     */
     public function testConstruct()
     {
         $this->assertInstanceOf('\Minphp\Form\Form', new Form());
