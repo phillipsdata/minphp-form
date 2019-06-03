@@ -656,10 +656,10 @@ class Form extends Html
                         $html .= "</optgroup>" . $this->eol;
                     }
 
-                    $html .= "<optgroup label=\"" . $this->_($name, true) . "\">";
+                    $html .= "<optgroup label=\"" . $this->_($name, true) . "\">" . $this->eol;
                     $open_group_tag = true;
                 } else {
-                    $attr['value'] = $this->_($value, true);
+                    $attr['value'] = $value;
 
                     $html .= "<option";
 
