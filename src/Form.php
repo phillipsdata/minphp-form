@@ -253,6 +253,15 @@ class Form extends Html
             if (!isset($fields[$i]['selected_values'])) {
                 $fields[$i]['selected_values'] = null;
             }
+            if (!isset($fields[$i]['min'])) {
+                $fields[$i]['min'] = null;
+            }
+            if (!isset($fields[$i]['max'])) {
+                $fields[$i]['max'] = null;
+            }
+            if (!isset($fields[$i]['step'])) {
+                $fields[$i]['step'] = null;
+            }
 
             switch ($fields[$i]['type']) {
                 case "button":
@@ -295,6 +304,16 @@ class Form extends Html
                 case "text":
                 default:
                     $html .= $this->fieldText($fields[$i]['name'], $fields[$i]['value'], $fields[$i]['attributes']);
+                    break;
+                case "number":
+                    $html .= $this->fieldNumber(
+                        $fields[$i]['name'],
+                        $fields[$i]['value'],
+                        $fields[$i]['min'],
+                        $fields[$i]['max'],
+                        $fields[$i]['step'],
+                        $fields[$i]['attributes']
+                    );
                     break;
                 case "textarea":
                     $html .= $this->fieldTextarea($fields[$i]['name'], $fields[$i]['value'], $fields[$i]['attributes']);
@@ -364,6 +383,25 @@ class Form extends Html
     public function fieldText($name, $value = null, $attributes = array())
     {
         return $this->output($this->fieldInput("input", "text", $name, $value, $attributes));
+    }
+
+    /**
+     * Creates a number input field
+     *
+     * @param string $name The name to set in the HTML name field
+     * @param string $value The value to set in the HTML value field
+     * @param int $min Specifies the minimum value allowed
+     * @param int $max Specifies the maximum value allowed
+     * @param int $step Specifies the legal number intervals
+     * @param array $attributes Attributes for this input field
+     * @return string The text field specified, void if output enabled
+     */
+    public function fieldNumber($name, $value = null, $min = null, $max = null, $step = null, $attributes = array())
+    {
+        $attributes['min'] = $min;
+        $attributes['max'] = $max;
+        $attributes['step'] = $step;
+        return $this->output($this->fieldInput("input", "number", $name, $value, $attributes));
     }
 
     /**
