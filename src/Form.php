@@ -217,7 +217,10 @@ class Form extends Html
             $csrf_token = $_POST[$this->csrf_token_name];
         }
 
-        return $this->getCsrfToken($key) == $csrf_token;
+        return hash_equals(
+            $this->getCsrfToken($key),
+            is_string($csrf_token) ? $csrf_token : ''
+        );
     }
 
     /**
